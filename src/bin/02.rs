@@ -2,38 +2,19 @@ use std::collections::BTreeMap;
 
 advent_of_code::solution!(2);
 
-fn parse(line: &str) -> BTreeMap<&str, u32> {
-    line.strip_prefix("Game")
-        .unwrap()
-        .split(": ")
-        .skip(1)
-        .flat_map(|cubes| {
-            cubes
-                .split(&[';', ','])
-                .map(|cube| {
-                    let (count, color) = cube.trim().split_once(' ').unwrap();
-                    (color, count.parse::<u32>().unwrap())
-                })
-                .fold(BTreeMap::new(), |mut map, (key, value)| {
-                    map.entry(key)
-                        .and_modify(|curr| *curr = u32::max(*curr, value))
-                        .or_insert(value);
-                    map
-                })
-        })
-        .collect()
-}
-
 pub fn part_one(input: &str) -> Option<u32> {
     let limits: BTreeMap<&str, u32> = BTreeMap::from([("blue", 14), ("green", 13), ("red", 12)]);
 
     Some(
         input
             .lines()
-            .map(parse)
-            .enumerate()
-            .filter(|(_, game)| !game.keys().any(|key| game.get(key) > limits.get(key)))
-            .map(|(i, _)| i as u32 + 1)
+            .map(Game::parse)
+            .filter(|game| {
+                game.blue <= *limits.get("blue").unwrap()
+                    && game.red <= *limits.get("red").unwrap()
+                    && game.green <= *limits.get("green").unwrap()
+            })
+            .map(|game| game.id)
             .sum(),
     )
 }
@@ -42,10 +23,54 @@ pub fn part_two(input: &str) -> Option<u32> {
     Some(
         input
             .lines()
-            .map(parse)
-            .map(|game| game.values().product::<u32>())
+            .map(Game::parse)
+            .map(|game| game.red * game.green * game.blue)
             .sum(),
     )
+}
+
+#[derive(Debug)]
+struct Game {
+    red: u32,
+    green: u32,
+    blue: u32,
+    id: u32,
+}
+
+impl Game {
+    fn parse(line: &str) -> Self {
+        let (game, sets) = line.split_once(':').unwrap();
+
+        let id = game
+            .split_ascii_whitespace()
+            .nth(1)
+            .unwrap()
+            .parse::<u32>()
+            .unwrap();
+
+        let mut game = Self {
+            id,
+            red: 0,
+            blue: 0,
+            green: 0,
+        };
+
+        for set in sets.split(';').map(str::trim) {
+            for cubes in set.split(',').map(str::trim) {
+                let (count, color) = cubes.split_once(' ').unwrap();
+                let count = count.parse::<u32>().unwrap();
+
+                match color {
+                    "blue" => game.blue = u32::max(game.blue, count),
+                    "green" => game.green = u32::max(game.green, count),
+                    "red" => game.red = u32::max(game.red, count),
+                    _ => panic!("unexpected color"),
+                }
+            }
+        }
+
+        game
+    }
 }
 
 #[cfg(test)]
