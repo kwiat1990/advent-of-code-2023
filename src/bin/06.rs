@@ -16,10 +16,17 @@ pub fn part_one(input: &str) -> Option<u32> {
 
 pub fn part_two(input: &str) -> Option<u64> {
     let race = parse_2(input);
-    let time = race[0];
-    let record = race[1];
+    let time = race[0] as f64;
+    let record = race[1] as f64;
 
-    Some((1..=time).filter(|i| (time - i) * i > record).count() as u64)
+    // Quadratic formula to the resque: https://en.wikipedia.org/wiki/Quadratic_formula
+    let min = (time - (time.powf(2.0) - 4.0 * record).sqrt()) / 2.0;
+    let max = (time + (time.powf(2.0) - 4.0 * record).sqrt()) / 2.0;
+
+    let hold_time_min = (min + 1.0).floor() as u64;
+    let hold_time_max = (max - 1.0).ceil() as u64;
+
+    Some(hold_time_max - hold_time_min + 1)
 }
 
 fn parse(input: &str) -> Vec<Vec<u32>> {
