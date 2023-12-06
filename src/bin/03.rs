@@ -32,21 +32,20 @@ pub fn part_two(input: &str) -> Option<u32> {
 
     let nums = Number::parse(&text);
     let symbols = Symbol::parse(&text, width);
-
     let gear = symbols.get("*").expect("there is a gear symbol");
 
-    let mut sum = 0;
-    for row in gear.iter() {
-        let o = nums
-            .iter()
-            .filter(|n| (n.start_pos..=n.end_pos).any(|pos| row.contains(&pos)));
-
-        if o.clone().count() == 2 {
-            sum += o.map(|n| n.num).product::<u32>();
-        }
-    }
-
-    Some(sum)
+    Some(
+        gear.iter()
+            .map(|positions| {
+                nums.iter()
+                    .filter(|n| (n.start_pos..=n.end_pos).any(|x| positions.contains(&x)))
+                    .map(|n| n.num)
+                    .collect::<Vec<_>>()
+            })
+            .filter(|result| result.len() == 2)
+            .map(|result| result.iter().product::<u32>())
+            .sum(),
+    )
 }
 
 #[derive(Debug, Copy, Clone, PartialOrd, PartialEq)]
