@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 advent_of_code::solution!(7);
 
 pub fn part_one(input: &str) -> Option<u32> {
-    let mut bids: Vec<(Hand, u32)> = input.lines().map(parse).collect();
+    let mut bids: Vec<(Hand, u32)> = input.lines().map(|line| parse(line, false)).collect();
 
     bids.sort();
 
@@ -15,13 +15,25 @@ pub fn part_one(input: &str) -> Option<u32> {
     )
 }
 
-pub fn part_two(_input: &str) -> Option<u32> {
-    None
+pub fn part_two(input: &str) -> Option<u32> {
+    let mut bids: Vec<(Hand, u32)> = input.lines().map(|line| parse(line, true)).collect();
+
+    bids.sort();
+
+    Some(
+        bids.iter()
+            .enumerate()
+            .map(|(i, (_, bid))| (i as u32 + 1) * bid)
+            .sum(),
+    )
 }
 
-fn parse(line: &str) -> (Hand, u32) {
+fn parse(line: &str, has_joker: bool) -> (Hand, u32) {
     let (cards, bid) = line.split_once(char::is_whitespace).unwrap();
-    let hand = cards.chars().map(Card::from).collect::<Hand>();
+    let hand = cards
+        .chars()
+        .map(|c| Card::from((c, has_joker)))
+        .collect::<Hand>();
     let bid = bid.parse::<u32>().expect("bid must be a number");
 
     (hand, bid)
@@ -29,6 +41,7 @@ fn parse(line: &str) -> (Hand, u32) {
 
 #[derive(Debug, Copy, Clone, Hash, Eq, PartialEq, PartialOrd, Ord)]
 enum Card {
+    Joker = 1,
     Two = 2,
     Three = 3,
     Four = 4,
@@ -44,22 +57,25 @@ enum Card {
     Ace = 14,
 }
 
-impl From<char> for Card {
-    fn from(c: char) -> Card {
-        match c {
-            '2' => Card::Two,
-            '3' => Card::Three,
-            '4' => Card::Four,
-            '5' => Card::Five,
-            '6' => Card::Six,
-            '7' => Card::Seven,
-            '8' => Card::Eight,
-            '9' => Card::Nine,
-            'T' => Card::Ten,
-            'J' => Card::Jack,
-            'Q' => Card::Queen,
-            'K' => Card::King,
-            'A' => Card::Ace,
+impl From<(char, bool)> for Card {
+    fn from(val: (char, bool)) -> Self {
+        match val.0 {
+            '2' => Self::Two,
+            '3' => Self::Three,
+            '4' => Self::Four,
+            '5' => Self::Five,
+            '6' => Self::Six,
+            '7' => Self::Seven,
+            '8' => Self::Eight,
+            '9' => Self::Nine,
+            'T' => Self::Ten,
+            'J' => match val.1 {
+                true => Self::Joker,
+                false => Self::Jack,
+            },
+            'Q' => Self::Queen,
+            'K' => Self::King,
+            'A' => Self::Ace,
             _ => panic!("unrecognizable card"),
         }
     }
@@ -78,17 +94,23 @@ enum HandType {
 
 impl From<&Hand> for HandType {
     fn from(hand: &Hand) -> Self {
-        let mapper = hand.0.iter().fold(BTreeMap::new(), |mut acc, c| {
+        let mut cards = hand.get_cards().iter().fold(BTreeMap::new(), |mut acc, c| {
             *acc.entry(c).or_insert(0) += 1;
             acc
         });
+        let mut jokers = 0;
 
-        let mut values: Vec<i32> = mapper.values().copied().collect();
+        if let Some(j) = cards.get(&Card::Joker) {
+            jokers = *j;
+        }
+
+        cards.remove(&Card::Joker);
+        let mut values: Vec<u32> = cards.values().copied().collect();
         values.sort();
 
         let (first, second) = (
-            values.last().unwrap_or(&1),
-            values.get(values.len() - 2).unwrap_or(&1),
+            values.last().unwrap_or(&0) + jokers,
+            values.get(values.len() - 2).unwrap_or(&0),
         );
 
         match (first, second) {
@@ -105,6 +127,12 @@ impl From<&Hand> for HandType {
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 struct Hand(Vec<Card>);
+
+impl Hand {
+    fn get_cards(&self) -> &Vec<Card> {
+        &self.0
+    }
+}
 
 impl Iterator for Hand {
     type Item = Card;
@@ -159,6 +187,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(5905));
     }
 }
