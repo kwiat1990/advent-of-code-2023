@@ -18,8 +18,10 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 | [Day 8](https://adventofcode.com/2023/day/8) | ⭐ | ⭐ |
 | [Day 9](https://adventofcode.com/2023/day/9) | ⭐ | ⭐ |
 | [Day 11](https://adventofcode.com/2023/day/11) | ⭐ | ⭐ |
+| [Day 13](https://adventofcode.com/2023/day/13) | ⭐ | ⭐ |
 | [Day 14](https://adventofcode.com/2023/day/14) | ⭐ | ⭐ |
 | [Day 15](https://adventofcode.com/2023/day/15) | ⭐ | ⭐ |
+| [Day 19](https://adventofcode.com/2023/day/19) | ⭐ |   |
 <!--- advent_readme_stars table --->
 
 <!--- benchmarking table --->
