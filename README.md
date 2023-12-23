@@ -21,6 +21,7 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 | [Day 13](https://adventofcode.com/2023/day/13) | ⭐ | ⭐ |
 | [Day 14](https://adventofcode.com/2023/day/14) | ⭐ | ⭐ |
 | [Day 15](https://adventofcode.com/2023/day/15) | ⭐ | ⭐ |
+| [Day 17](https://adventofcode.com/2023/day/17) | ⭐ | ⭐ |
 | [Day 19](https://adventofcode.com/2023/day/19) | ⭐ |   |
 <!--- advent_readme_stars table --->
 
@@ -29,22 +30,23 @@ Solutions for [Advent of Code](https://adventofcode.com/) in [Rust](https://www.
 
 | Day | Part 1 | Part 2 |
 | :---: | :---: | :---:  |
-| [Day 1](./src/bin/01.rs) | `190.7µs` | `1.5ms` |
-| [Day 2](./src/bin/02.rs) | `66.5µs` | `65.4µs` |
-| [Day 3](./src/bin/03.rs) | `5.7ms` | `7.3ms` |
-| [Day 4](./src/bin/04.rs) | `545.0µs` | `582.0µs` |
-| [Day 6](./src/bin/06.rs) | `706.0ns` | `296.0ns` |
+| [Day 1](./src/bin/01.rs) | `193.8µs` | `1.6ms` |
+| [Day 2](./src/bin/02.rs) | `67.6µs` | `63.6µs` |
+| [Day 3](./src/bin/03.rs) | `5.6ms` | `7.9ms` |
+| [Day 4](./src/bin/04.rs) | `565.1µs` | `563.5µs` |
+| [Day 6](./src/bin/06.rs) | `727.0ns` | `304.0ns` |
 | [Day 7](./src/bin/07.rs) | `4.5ms` | `4.6ms` |
-| [Day 8](./src/bin/08.rs) | `458.9µs` | `4.2ms` |
-| [Day 9](./src/bin/09.rs) | `318.6µs` | `319.0µs` |
-| [Day 11](./src/bin/11.rs) | `1.5ms` | `1.7ms` |
+| [Day 8](./src/bin/08.rs) | `461.3µs` | `4.4ms` |
+| [Day 9](./src/bin/09.rs) | `333.2µs` | `319.9µs` |
+| [Day 11](./src/bin/11.rs) | `1.7ms` | `1.9ms` |
 | [Day 12](./src/bin/12.rs) | `-` | `-` |
-| [Day 13](./src/bin/13.rs) | `437.4µs` | `420.3µs` |
-| [Day 14](./src/bin/14.rs) | `3.2ms` | `2.8s` |
-| [Day 15](./src/bin/15.rs) | `75.0µs` | `221.9µs` |
-| [Day 19](./src/bin/19.rs) | `473.3µs` | `-` |
+| [Day 13](./src/bin/13.rs) | `525.3µs` | `671.4µs` |
+| [Day 14](./src/bin/14.rs) | `3.9ms` | `2.8s` |
+| [Day 15](./src/bin/15.rs) | `77.9µs` | `238.0µs` |
+| [Day 17](./src/bin/17.rs) | `92.3ms` | `323.4ms` |
+| [Day 19](./src/bin/19.rs) | `488.0µs` | `-` |
 
-**Total: 2838.38ms**
+**Total: 3256.37ms**
 <!--- benchmarking table --->
 
 ---
